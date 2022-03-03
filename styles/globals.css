@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+
+@layer components {
+    .container {
+        @apply max-w-6xl mx-auto
+    }
+    .content {
+        @apply pb-10 flex-1 lg:border-x lg:border-gray-200
+    }
+    .overlay {
+        @apply fixed bg-[rgba(0,0,0,0.1)] z-20 w-full h-full top-0 left-0 right-0 bottom-0
+    }
+    .flex-center {
+        @apply flex items-center justify-center
+    }
+    .flex-between {
+        @apply flex items-center justify-between
+    }
+    
+    .link-container {
+        @apply flex items-center space-x-3 hover:text-blue-400 cursor-pointer mb-10
+    }
+    .link-text {
+        @apply transition duration-300 text-[15px] md:text-base
+    }
+    .icon-link {
+        @apply text-xl md:text-2xl group-hover:transform group-hover:scale-125 transition duration-300
+    }
+
+    .btn {
+        @apply cursor-pointer py-2 px-4 rounded text-white bg-blue-500 hover:bg-blue-600 transition duration-300
+    }   
+    .btn-loading {
+        @apply bg-gray-500 hover:bg-gray-500 cursor-not-allowed
+    }
+    .form-box {
+        @apply p-4 border shadow-sm rounded w-full md:min-w-[450px] lg:min-w-[400px] min-h-[350px] bg-white
+    }
+    .form-loading {
+        @apply absolute z-10 w-full h-full top-0 right-0 bottom-0 left-0 animate-pulse bg-gray-100 opacity-20
+    }
+    .input-control {
+        @apply flex flex-col space-y-2 mb-3 text-gray-600 flex-1
+    }
+    .form-label {
+        @apply flex flex-col space-y-2 mb-3
+    }
+    .form-input {
+        @apply p-2 rounded border border-gray-200 bg-transparent outline-none
+    }
+    .text-error {
+        @apply text-red-400
+    }
+    .flex-detail {
+        @apply flex flex-col space-y-1 mb-3
+    }
+    .text-title-detail {
+        @apply text-lg font-semibold text-gray-700
+    }
+    .sosmed-icon {
+        @apply text-2xl cursor-pointer hover:transform hover:scale-125 transition duration-300
+    }
+
+    .profile-container {
+        @apply lg:shadow-lg px-5 py-10 rounded-md
+    }
+
+    .text-box {
+        @apply p-2 bg-gray-100 rounded text-sm relative mr-2 mb-2 text-gray-500
+    }
+
+    .item {
+        @apply flex items-center space-x-3 hover:bg-gray-100 hover:text-gray-500 cursor-pointer py-2 px-3
+    }
+    .dropdown {
+        @apply absolute right-[25px] -top-[15px] bg-gray-500 w-[200px] min-h-[100px] shadow-lg rounded py-3 flex flex-col text-white
+    }
+}
