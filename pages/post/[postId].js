@@ -115,21 +115,48 @@ const PostDetail = ({data}) => {
 }
 
 
-export const getServerSideProps = async(context) => {
-    const data = await utilFetchGet(`jobs`)
-    const dataId = data?.data.find(post => post._id === context.query.postId)
+// export const getServerSideProps = async(context) => {
+//     const data = await utilFetchGet(`jobs`)
+//     const dataId = data?.data.find(post => post._id === context.query.postId)
 
-    if(!dataId) {
+//     if(!dataId) {
+//         return {
+//             notFound: true
+//         }
+//     } 
+//     return {
+//         props: {
+//             data: dataId,
+//         }
+//     }
+// }
+
+export const getStaticPaths = async () => {
+    const data = await utilFetchGet(`jobs`)
+    const paths = data.data.map(post => ({
+        params: { postId: post._id }
+    }))
+
+    return {
+        paths,
+        fallback: true
+    }
+}
+
+export const getStaticProps = async ({params}) => {
+    try {
+        const data = await utilFetchGet(`jobs/${params.postId}`)
+        return {
+            props: { data },
+            revalidate: 40
+        }
+    } catch (error) {
         return {
             notFound: true
         }
     } 
-    return {
-        props: {
-            data: dataId,
-        }
-    }
 }
+
 
 
 

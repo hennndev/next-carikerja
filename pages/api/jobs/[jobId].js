@@ -2,6 +2,15 @@ import clientPromise from "lib/mongodb";
 import { ObjectId } from "mongodb";
 
 export default async function handler(req, res) {
+
+    if(req.method === 'GET') {
+        const client = await clientPromise
+        const db = client.db()
+        const { jobId } = req.query
+
+        const dataDetail = await db.collection('posts').findOne({"_id": ObjectId(jobId)})
+        res.status(200).json({message: 'Berhasil mengambil data detail', data: dataDetail})
+    }
     
     if(req.method === 'POST') {
         const client = await clientPromise
