@@ -63,9 +63,9 @@ const PostDetail = ({data}) => {
                                     <p>Sistem Pekerjaan: {' '}
                                             <span className="text-gray-600 font-medium">{data?.data.sistemPekerjaan}</span>
                                     </p>
-                                    <p>Jangka Waktu: {' '}
+                                    {/* <p>Jangka Waktu: {' '}
                                         <span className="text-gray-600 font-medium">{data?.data?.jangkaWaktu?.replaceAll('_', ' ')}</span>
-                                    </p>
+                                    </p> */}
                                     <p>Range Gaji: <span className="text-green-600 font-medium">{data?.data.rangeGaji}</span></p>
                                     {!userLogin?.namaPerusahaan && (
                                         <div className="flex items-center space-x-3">
