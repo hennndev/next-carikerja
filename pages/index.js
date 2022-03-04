@@ -23,7 +23,7 @@ export default function Home({data}) {
     //             post?.kategoriPekerjaan?.toLowerCase().includes(utilValSearch(searchVal)) ||
     //             [].concat.apply([], post?.kemampuan?.map(skill => skill.split(' '))).some(skill => searchVal.split(' ').includes(skill))
     // })
-    const filteredPost = data?.data
+    let filteredPost = data?.data
 
     if(kategoriValues.length > 0) {
         filteredPost = filteredPost.filter(data => kategoriValues.includes(data.kategoriPekerjaan))
