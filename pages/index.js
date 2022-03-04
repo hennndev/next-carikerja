@@ -13,8 +13,6 @@ export default function Home({data}) {
     const [sistemValues, setSistemValues] = useState([])
     const [kategoriValues, setKategoriValues] = useState([])
 
-    replaceAll
-
     let filteredPost = data?.data?.filter(post => {
         return post?.dataEmployer?.alamatPerusahaan.toLowerCase().includes(searchVal?.toLowerCase()?.trim()?.replaceAll(' ', '')) ||
                 post?.dataEmployer?.namaPerusahaan.toLowerCase().includes(searchVal?.toLowerCase()?.trim()?.replaceAll(' ', '')) || 
