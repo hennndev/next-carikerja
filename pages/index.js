@@ -59,13 +59,8 @@ export default function Home({data}) {
 
 
 export const getServerSideProps = async() => {
-    const res = await fetch(`${apiRoute}/api/jobs`)
+    const res = await fetch(`https://next-carikerja.vercel.app/api/jobs`)
     const data = await res.json()
-    if(!data){
-        return {
-            notFound: true
-        }
-    }
     return {
         props: {
             data
