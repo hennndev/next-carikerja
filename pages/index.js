@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import { useState } from 'react'
+import { apiRoute } from 'config/config'
 import Posts from '@/components/Homepage/Posts'
 import PageHeader from '@/components/UI/PageHeader'
 import RightSidebar from '@/components/UI/RightSidebar'
@@ -57,17 +58,9 @@ export default function Home({data}) {
 }
 
 
-export const getStaticProps = async() => {
-    let data = {
-        data: []
-    }
-    try {
-        data = await utilFetchGet(`jobs`)
-    } catch (error) {
-        data = {
-            data: []
-        }
-    }
+export const getServerSideProps = async() => {
+    const res = await fetch(`${apiRoute}/api/jobs`)
+    const data = await res.json()
     return {
         props: {
             data
