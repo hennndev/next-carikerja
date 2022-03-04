@@ -1,6 +1,7 @@
 import Head from "next/head"
 import nookies from 'nookies'
 import { useRouter } from "next/router"
+import { utilFetchGet } from "utils/utils"
 import { useData } from "context/appContext"
 import { useAuth } from "context/authContext"
 import LatestJob from "@/components/UI/LatestJob"
@@ -50,8 +51,7 @@ export const getServerSideProps = async(ctx) => {
         }
     }
     if(JSON.parse(userLogin)) {
-        const res = await fetch(`http://localhost:3000/api/account/${JSON.parse(userLogin).email}?coll=${JSON.parse(userLogin).namaPerusahaan ? 'employers' : 'job_seekers'}`)
-        const data = await res.json()
+        const data = await utilFetchGet(`account/${JSON.parse(userLogin).email}?coll=${JSON.parse(userLogin).namaPerusahaan ? 'employers' : 'job_seekers'}`)
         const {password, createdAt, ...dataAccount} = data?.data
 
         return {

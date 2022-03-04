@@ -3,6 +3,7 @@ import nookies from 'nookies'
 import Head from "next/head"
 import { useState } from 'react'
 import { useFormik } from "formik"
+import { utilFetch } from 'utils/utils'
 import { useRouter } from "next/router"
 import { useAuth } from 'context/authContext'
 import LatestJob from "@/components/UI/LatestJob"
@@ -14,12 +15,11 @@ import { HiArrowSmLeft, HiArrowSmRight } from 'react-icons/hi'
 
 const Login = () => {
 
-    const [isLoading, setIsLoading] = useState(false)
-    const [isError, setIsError] = useState(null)
-    const [asEmployer, setAsEmployer] = useState(false)
-
-    const { handleUserLogin } = useAuth()
     const router = useRouter()
+    const { handleUserLogin } = useAuth()
+    const [isError, setIsError] = useState(null)
+    const [isLoading, setIsLoading] = useState(false)
+    const [asEmployer, setAsEmployer] = useState(false)
 
     const formik = useFormik({
         initialValues: {
@@ -29,21 +29,14 @@ const Login = () => {
         onSubmit: async (values) => {
             setIsLoading(true)
             try {
-                const res = await fetch('/api/auth/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({asEmployer, ...values})
-                })
-                const data = await res.json()
-                if(data.message) {
+                const resFetch = await utilFetch(`auth/login`, 'POST', {asEmployer, ...values})
+                if(resFetch.message) {
                     setIsLoading(false)
                     setIsError(null)
-                    handleUserLogin(data)
+                    handleUserLogin(resFetch)
                     router.replace('/')
                 } else {
-                    throw new Error(data.error)
+                    throw new Error(resFetch.error)
                 }
             } catch(error) {
                 setIsLoading(false)
@@ -57,7 +50,6 @@ const Login = () => {
         
     })
     
-
     return (
         <>
             <Head>
@@ -65,8 +57,7 @@ const Login = () => {
             </Head>
             <PageContainer>
                 <div className='content'>
-                    <PageHeader title="Login"/>
-                   
+                    <PageHeader title="Login"/>     
                     <div className="w-full md:flex-center flex-col px-5 xl:px-10 mt-5">
                         <div>
                             <div className={`flex items-center ${!asEmployer && 'justify-end'} space-x-3 mb-5 text-gray-500 hover:text-orange-500 ${isLoading ? 'cursor-not-allowed' : 'cursor-pointer'}`} onClick={() => !isLoading && setAsEmployer(!asEmployer)}>
@@ -113,7 +104,6 @@ const Login = () => {
     )
 }
 
-
 export const getServerSideProps = async(ctx) => {
     const cookies = nookies.get(ctx)
     if(cookies.userLogin) {
@@ -123,11 +113,9 @@ export const getServerSideProps = async(ctx) => {
             }
         }
     }
-
     return {
         props: {}
     }
 }
-
 
 export default Login

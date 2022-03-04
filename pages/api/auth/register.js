@@ -4,15 +4,14 @@ import { genSalt, hash } from "bcryptjs"
 
 export default async function handler(req, res) {
 
-
     if(req.method === 'POST') {
         const client = await clientPromise
         const db = client.db()
         const { jobSeeker = false, data: {password, ...dataRegister} } = req.body
 
         let dataAccount = {
-            alamat: '',
             job: [],
+            alamat: '',
             skills: [],
             tentangSaya: '',
             fotoProfile: null,
@@ -27,7 +26,6 @@ export default async function handler(req, res) {
         }
 
         let checkExistingUser = await db.collection(jobSeeker ? 'job_seekers' : 'employers').findOne({email: dataRegister.email})
-
         if(checkExistingUser) {
             res.status(422).json({error: 'Email sudah terdaftar, silahkan coba lagi'})
         } else {

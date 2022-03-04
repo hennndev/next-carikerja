@@ -4,12 +4,12 @@ import { useFormik } from "formik"
 import BackPage from '../UI/BackPage'
 import { useRouter } from "next/router"
 import InputControl from '../UI/InputControl'
-import { HiArrowSmLeft } from 'react-icons/hi'
+import { utilFetch } from '../../utils/utils'
 
 const RegisterForm = ({handleBack, isJobSeeker, isEmployer}) => {
 
-    const [isLoading, setIsLoading] = useState(false)
     const [isError, setIsError] = useState(null)
+    const [isLoading, setIsLoading] = useState(false)
     const [isSuccess, setIsSuccess] = useState(null)
 
     const formik = useFormik({
@@ -31,21 +31,14 @@ const RegisterForm = ({handleBack, isJobSeeker, isEmployer}) => {
                     password: values.password,
                 }
                 const { passwordConfirmation, username, ...employerValues} = values
-                const res = await fetch('/api/auth/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({jobSeeker: isJobSeeker, data: isJobSeeker ? jobSeekerValues : employerValues})
-                })
-                const data = await res.json()
-                if(data.message) {
+                const resFetch = await utilFetch(`auth/register`, 'POST', {jobSeeker: isJobSeeker, data: isJobSeeker ? jobSeekerValues : employerValues})
+                if(resFetch.message) {
                     setIsLoading(false)
                     setIsError(null)
-                    setIsSuccess(data.message)
+                    setIsSuccess(resFetch.message)
                     resetForm()
                 } else {
-                    throw new Error(data.error)
+                    throw new Error(resFetch.error)
                 }
             } catch(error) {
                 setIsLoading(false)

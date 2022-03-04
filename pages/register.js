@@ -12,7 +12,6 @@ const Register = () => {
     const [isJobSeeker, setIsJobSeeker] = useState(false)
 
     const handleBack = () => isJobSeeker ? setIsJobSeeker(false) : setIsEmployer(false)
-
     return (
         <>
             <Head>

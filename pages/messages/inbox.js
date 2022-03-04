@@ -18,7 +18,7 @@ const Inbox = () => {
     const router = useRouter()
     const { messageTerm } = useData()
     const [isSuccess, setIsSuccess] = useState(false)
-    const [isMsgSetting, setIsMsgSetting] = useState(false)
+    const [dropdown, setDropdown] = useState(false)
     const [isCreateMessage, setIsCreateMessage] = useState(false)
 
     const fetchDelete = async(url) => {
@@ -43,11 +43,11 @@ const Inbox = () => {
         setIsSuccess(false)
         router.replace('/messages')
     }
-    const handleMsgSetting = (e, val) => {
+    const handleDropdown = (e, val) => {
         e.stopPropagation()
-        setIsMsgSetting(val)
+        setDropdown(val)
     }
-    const handleCloseMsgSetting = () => setIsMsgSetting(false)
+    const handleCloseDropdown = () => setDropdown(false)
     useEffect(() => {
         if(!messageTerm) {
             router.replace('/messages')
@@ -64,18 +64,18 @@ const Inbox = () => {
                 <h1>Berhasil menghapus pesan ini</h1>
             </Modal>}
             <PageContainer>
-                <div className='px-5 xl:px-10 content' onClick={handleCloseMsgSetting}>
+                <div className='px-5 xl:px-10 content' onClick={handleCloseDropdown}>
                     <PageHeader title="Inbox"/>
-                    <BackPage clicked={() => router.push('/messages')}/>
+                    <BackPage clicked={() => router.back()}/>
                     <div className="shadow-sm border border-gray-300 rounded w-full min-h-[300px] p-5 flex flex-col">
                         <InboxHeader messageTerm={messageTerm}/>
                         {messageTerm ? <InboxBody 
                             messageTerm={messageTerm} 
                             isCreateMessage={isCreateMessage} 
-                            isMsgSetting={isMsgSetting} 
-                            handleMsgSetting={handleMsgSetting} 
+                            dropdown={dropdown} 
+                            handleDropdown={handleDropdown} 
                             setIsCreateMessage={setIsCreateMessage} 
-                            handleCloseMsgSetting={handleCloseMsgSetting}
+                            handleCloseDropdown={handleCloseDropdown}
                             handleDeleteMessage={handleDeleteMessage}/> : (
                             <p className="flex-center text-gray-500 mt-5">No Data...</p>
                         )}

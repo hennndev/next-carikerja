@@ -1,19 +1,20 @@
 import useSWR from "swr"
 import Head from "next/head"
 import nookies from 'nookies'
+import { apiRoute } from "config/config"
 import { useAuth } from "context/authContext"
 import LatestJob from "@/components/UI/LatestJob"
 import PageHeader from "@/components/UI/PageHeader"
 import RightSidebar from "@/components/UI/RightSidebar"
-import PostJobForm from "@/components/PostJob/PostJobForm"
 import PageContainer from "@/components/UI/PageContainer"
+import PostJobForm from "@/components/PostJob/PostJobForm"
 
 const fetcher = (url) => fetch(url).then(res => res.json())
 
 const PostJob = () => {
     const { userLogin } = useAuth()
     const { data } = useSWR(
-        `/api/account/${userLogin?.email}?coll=employers`,
+        `${apiRoute}/api/account/${userLogin?.email}?coll=employers`,
         fetcher
     )
     return (
@@ -37,22 +38,18 @@ const PostJob = () => {
     )
 }
 
-
 export const getServerSideProps = async(ctx) => {
-    const cookies = nookies.get(ctx)
-
-    if(!cookies.userLogin) {
+    const { userLogin } = nookies.get(ctx)
+    if(!JSON.parse(userLogin).namaPerusahaan) {
         return {
             redirect: {
                 destination: '/'
             }
         }
     }
-
     return {
         props: {}
     }
 }
-
 
 export default PostJob

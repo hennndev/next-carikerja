@@ -1,5 +1,7 @@
+import * as Yup from 'yup'
 import Modal from '../UI/Modal'
 import { useFormik } from "formik"
+import { utilFetch } from 'utils/utils'
 import { useRouter } from 'next/router'
 import ImageField from '../UI/ImageField'
 import { useState, useEffect } from 'react'
@@ -14,39 +16,6 @@ const EmployerEditProfile = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [isSuccess, setIsSuccess] = useState(false)
 
-    const fetchJobs = async({fotoURL, ...values}) => {
-        const req = await fetch(`/api/jobs?email=${accountTerm.email}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                logoProfileURL: fotoURL,
-                ...values
-            })
-        })
-        const res = await req.json()
-        return res
-    }
-    const fetchMsgs = async({fotoURL, namaPerusahaan}) => {
-        const req = await fetch(`/api/messages?email=${accountTerm.email}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                logoProfileURL: fotoURL,
-                namaPerusahaan
-            })
-        })
-        const res = await req.json()
-        if(res) {
-            setIsSuccess(true)
-            setIsLoading(false)
-            formik.resetForm()   
-        }
-    }
-
     const formik = useFormik({
         initialValues: {
             namaPerusahaan: '',
@@ -57,8 +26,6 @@ const EmployerEditProfile = () => {
         },
         onSubmit: async (values, {resetForm}) => {
             setIsLoading(true)
-            
-            // Apabila user baru pertama kali unggah foto atau user ingin mengganti foto 
             if(values.logoProfile && !values.logoProfile?.logoProfileURL) {
                 const formDataImage = new FormData()
                 formDataImage.append('file', values.logoProfile)
@@ -81,10 +48,16 @@ const EmployerEditProfile = () => {
                             },
                             oldLogoProfile: accountTerm?.logoProfile?.logoProfileId
                         })
-                    }).then((res) => res.json()).then(async(res) => {        
-                        const resFetchJobs = await fetchJobs({fotoURL: res.data.logoProfile.logoProfileURL,...values})
-                        if(resFetchJobs) {
-                            await fetchMsgs({fotoURL: resFetchJobs.data.logoProfileURL, namaPerusahaan: resFetchJobs.data.namaPerusahaan})
+                    }).then((res) => res.json()).then(async(res) => {    
+                        const resFetch = await utilFetch(`jobs?email=${accountTerm.email}`, 'PUT', {logoProfileURL: res.data.logoProfile?.logoProfileURL,...values}) 
+                        if(resFetch) {
+                            const resFetchMsg = await utilFetch(`messages?email=${accountTerm.email}`, 'PUT', {logoProfileURL: resFetch.data.logoProfileURL, namaPerusahaan: resFetch.data.namaPerusahaan}) 
+
+                            if(resFetchMsg) {
+                                setIsSuccess(true)
+                                setIsLoading(false)
+                                resetForm()   
+                            }
                         }
                     })
                 })
@@ -99,15 +72,24 @@ const EmployerEditProfile = () => {
                         ...values
                     })
                 }).then(res => res.json()).then(async(res) => {
-                    const resFetchJobs = await fetchJobs({fotoURL: res.data?.logoProfile?.logoProfileURL,...values})
-                    if(resFetchJobs) {
-                        await fetchMsgs({fotoURL: resFetchJobs.data.logoProfileURL, namaPerusahaan: resFetchJobs.data.namaPerusahaan})
+                    const resFetch = await utilFetch(`jobs?email=${accountTerm.email}`, 'PUT', {logoProfileURL: res.data.logoProfile?.logoProfileURL, ...values}) 
+                    if(resFetch) {
+                        const resFetchMsg = await utilFetch(`messages?email=${accountTerm.email}`, 'PUT', {logoProfileURL: resFetch.data.logoProfileURL, namaPerusahaan: resFetch.data.namaPerusahaan})
+
+                        if(resFetchMsg) {
+                            setIsSuccess(true)
+                            setIsLoading(false)
+                            resetForm()   
+                        }
                     }
                 }).catch(() => {
                     setIsLoading(false)
                 })
             }
-        }
+        },
+        validationSchema: Yup.object({
+            namaPerusahaan: Yup.string().required('Nama perusahaan tidak boleh dikosongkan')
+        })
     })
 
     useEffect(() => {
@@ -138,7 +120,6 @@ const EmployerEditProfile = () => {
                 </Modal>
             )}
             {isLoading && <div className='form-loading'></div>}
-
             <InputControl id="namaPerusahaan" label="Nama Perusahaan" placeholder="Nama perusahaan anada"  formik={formik}/>      
             <InputControl id="alamatPerusahaan" label="Alamat Perusahaan" placeholder="Alamat perusahaan anda"  formik={formik}/>  
             <CustomField 

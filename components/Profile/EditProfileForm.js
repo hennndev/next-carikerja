@@ -1,6 +1,8 @@
+import * as Yup from 'yup'
 import nookies from 'nookies'
 import Modal from '../UI/Modal'
 import { useFormik } from "formik"
+import { utilFetch } from 'utils/utils'
 import { useRouter } from 'next/router'
 import ImageField from '../UI/ImageField'
 import { useState, useEffect } from 'react'
@@ -15,41 +17,6 @@ const EditProfileForm = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [isSuccess, setIsSuccess] = useState(false)
 
-    const fetchJobs = async({fotoURL, username}) => {
-        const req = await fetch('/api/jobs', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: accountTerm._id,
-                fotoProfileURL: fotoURL,
-                nama: username
-            })
-        })
-        const res = await req.json()
-        return res
-    }
-    const fetchMsgs = async({fotoURL, username}) => {
-        const req = await fetch(`/api/messages?email=${accountTerm.email}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: accountTerm._id,
-                fotoProfileURL: fotoURL,
-                nama: username
-            })
-        })
-        const res = await req.json()
-        if(res) {
-            setIsSuccess(true)
-            setIsLoading(false)
-            formik.resetForm()   
-        }
-    }
-
     const formik = useFormik({
         initialValues: {
             username: '',
@@ -60,9 +27,8 @@ const EditProfileForm = () => {
             tentangSaya: '',
             riwayatPendidikan: '',
         },
-        onSubmit: async (values) => {
+        onSubmit: async (values, { resetForm }) => {
             setIsLoading(true)
-
             if(values.fotoProfile && !values.fotoProfile?.fotoProfileURL) {
                 const formDataImage = new FormData()
                 formDataImage.append('file', values.fotoProfile)
@@ -86,9 +52,19 @@ const EditProfileForm = () => {
                             oldFotoProfile: accountTerm?.fotoProfile?.fotoProfileId
                         })
                     }).then((res) => res.json()).then(async(res) => {
-                        const resFetchJobs = await fetchJobs({fotoURL:res.data?.fotoProfile?.fotoProfileURL, username: values.username})
-                        if(resFetchJobs) {
-                            await fetchMsgs({fotoURL: resFetchJobs.data.fotoProfileURL, username: resFetchJobs.data.nama})
+                        const resFetch = await utilFetch(`jobs`, 'PUT', {
+                            id: accountTerm._id, 
+                            fotoProfileURL: res.data.fotoProfile?.fotoProfileURL, 
+                            nama: values.username}) 
+                        if(resFetch) {
+                            const resFetchMsg = await utilFetch(`messages?email=${accountTerm.email}`, 'PUT', {
+                                fotoProfileURL: resFetch.data.fotoProfileURL, 
+                                nama: resFetch.data.nama})
+                            if(resFetchMsg) {
+                                setIsSuccess(true)
+                                setIsLoading(false)
+                                resetForm()   
+                            } 
                         }
                     })
                 })
@@ -99,19 +75,32 @@ const EditProfileForm = () => {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        oldFotoProfile: !values.fotoProfile && accountTerm?.fotoProfile?.fotoProfileId ? accountTerm?.fotoProfile?.fotoProfileId : null, //Jika ingin foto profile kosong    
+                        oldFotoProfile: !values.fotoProfile && accountTerm?.fotoProfile?.fotoProfileId ? accountTerm?.fotoProfile?.fotoProfileId : null,
                         ...values
                     })
                 }).then(res => res.json()).then(async(res) => {
-                    const resFetchJobs = await fetchJobs({fotoURL:res.data?.fotoProfile?.fotoProfileURL, username: values.username})
-                    if(resFetchJobs) {
-                        await fetchMsgs({fotoURL: resFetchJobs.data.fotoProfileURL, username: resFetchJobs.data.nama})
+                    const resFetch = await utilFetch(`jobs`, 'PUT', {
+                        id: accountTerm._id, 
+                        fotoProfileURL: res.data.fotoProfile?.fotoProfileURL, 
+                        nama: values.username}) 
+                    if(resFetch) {
+                        const resFetchMsg = await utilFetch(`messages?email=${accountTerm.email}`, 'PUT', {
+                            fotoProfileURL: resFetch.data.fotoProfileURL, 
+                            nama: resFetch.data.nama})
+                        if(resFetchMsg) {
+                            setIsSuccess(true)
+                            setIsLoading(false)
+                            resetForm()   
+                        } 
                     }
                 }).catch(() => {
                     setIsLoading(false)
                 })
             }
-        }
+        },
+        validationSchema: Yup.object({
+            username: Yup.string().required('Username tidak boleh dikosongkan')
+        })
     })
 
     useEffect(() => {
@@ -134,9 +123,7 @@ const EditProfileForm = () => {
         setIsSuccess(false)
         router.replace('/profile')
     }
-
-
-    
+ 
     return (
         <form className="form-box relative" onSubmit={formik.handleSubmit}>
             {isSuccess && (
@@ -145,7 +132,6 @@ const EditProfileForm = () => {
                 </Modal>
             )}
             {isLoading && <div className='form-loading'></div>}
-
             <InputControl  id="username" label="Username" placeholder="Username kamu"  formik={formik}/>      
             <InputControl  id="alamat" label="Alamat" placeholder="Alamat kamu"  formik={formik}/>  
             <CustomField 
@@ -172,7 +158,6 @@ const EditProfileForm = () => {
 
 export const getServerSideProps = (ctx) => {
     const cookies = nookies.get(ctx)
-
     if(!cookies) {
         return {
             redirect: {

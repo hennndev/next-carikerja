@@ -2,22 +2,22 @@ import Head from "next/head"
 import Image from "next/image"
 import { useState } from "react"
 import { useRouter } from "next/router"
+import { apiRoute } from "config/config"
 import { useAuth } from "context/authContext"
 import BackPage from "@/components/UI/BackPage"
 import LatestJob from "@/components/UI/LatestJob"
 import PageHeader from "@/components/UI/PageHeader"
 import { BsBoxArrowInUpLeft } from 'react-icons/bs'
+import SosmedIcons from "@/components/UI/SosmedIcons"
 import ApplyForm from "@/components/PostJob/ApplyForm"
 import RightSidebar from "@/components/UI/RightSidebar"
 import PageContainer from "@/components/UI/PageContainer"
-import { AiFillFacebook, AiFillInstagram, AiFillTwitterCircle, AiFillLinkedin } from 'react-icons/ai'
 
 const PostDetail = ({data}) => {
 
-    const [isApply, setIsApply] = useState(false)
-    const { userLogin } = useAuth()
     const router = useRouter()
-
+    const { userLogin } = useAuth()
+    const [isApply, setIsApply] = useState(false)
     const checkCandidateExist = data.kandidat.find(data => data.id === userLogin?._id)
 
     const handleApply = () => {
@@ -82,11 +82,11 @@ const PostDetail = ({data}) => {
                             <div className="mt-10">
                                 <div className="flex-detail">
                                     <h1 className="text-title-detail">Tentang Perusahaan</h1>
-                                    <p className="text-gray-600">{data.dataEmployer.tentangPerusahaan}</p>
+                                    <p className="text-gray-600">{data.dataEmployer.tentangPerusahaan? data.dataEmployer.tentangPerusahaan : '---'}</p>
                                 </div>
                                 <div className="flex-detail">
                                     <h1 className="text-title-detail">Alamat Perusahaan</h1>
-                                    <p className="text-gray-600 mt-1">{data.dataEmployer.alamatPerusahaan}</p>
+                                    <p className="text-gray-600 mt-1">{data.dataEmployer.alamatPerusahaan ? data.dataEmployer.alamatPerusahaan : '---'}</p>
                                 </div>
                                 <div className="flex-detail">
                                     <h1 className="text-title-detail">Situs Perusahaan</h1>
@@ -100,12 +100,7 @@ const PostDetail = ({data}) => {
                                 </div>
                                 <div className="flex flex-col space-y-2">
                                     <h1 className="text-title-detail">Social Media</h1>
-                                    <div className="flex items-center mt-2 space-x-3">
-                                        <AiFillFacebook className="sosmed-icon text-blue-600"/>
-                                        <AiFillInstagram className="sosmed-icon text-pink-600"/>
-                                        <AiFillTwitterCircle className="sosmed-icon text-blue-400"/>
-                                        <AiFillLinkedin className="sosmed-icon text-blue-400"/>
-                                    </div>
+                                    <SosmedIcons/>
                                 </div>          
                             </div>
                         </div> 
@@ -121,17 +116,15 @@ const PostDetail = ({data}) => {
 
 
 export const getServerSideProps = async(context) => {
-    const res = await fetch('http://localhost:3000/api/jobs')
+    const res = await fetch(`${apiRoute}/api/jobs`)
     const data = await res.json()
-
     const dataId = data?.data.find(post => post._id === context.query.postId)
 
     if(!dataId) {
         return {
             notFound: true
         }
-    }
-    
+    } 
     return {
         props: {
             data: dataId,

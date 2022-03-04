@@ -1,6 +1,7 @@
 import * as Yup from 'yup'
 import Modal from '../UI/Modal'
 import { useFormik } from "formik"
+import { utilFetch } from 'utils/utils'
 import SalaryField from './SalaryField'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
@@ -16,22 +17,6 @@ const PostJobForm = ({editPost = false, data}) => {
     const [isLoading, setIsLoading] = useState(false)
     const [isSuccess, setIsSuccess] = useState(false)
 
-    const utilFetch = async(url, method, values) => {
-        const req = await fetch(`/api/${url}`, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(values)
-        })
-        const res = await req.json()
-        if(res) {
-            setIsLoading(false)
-            setIsSuccess(true)
-            formik.resetForm()
-        }
-    }
-
     const formik = useFormik({
         initialValues: {
             judul: '',
@@ -43,17 +28,27 @@ const PostJobForm = ({editPost = false, data}) => {
             jangkaWaktu: '',
             deskripsiPekerjaan: '',
         },
-        onSubmit: async(values) => {
+        onSubmit: async(values, { resetForm }) => {
             setIsLoading(true)
             if(postTerm && editPost) {
-                await utilFetch(`jobs/${postTerm._id}`, 'PUT', values)
+                const resFetch = await utilFetch(`jobs/${postTerm._id}`, 'PUT', values)
+                if(resFetch) {
+                    setIsLoading(false)
+                    setIsSuccess(true)
+                    resetForm()
+                }
             } else {
                 const formatValues = {
                     ...values,
                     kandidat: [],
                 }
                 const {_id, createdAt, password, logoProfile, ...dataEmployer} = data
-                await utilFetch('jobs', 'POST', {...formatValues, dataEmployer: {...dataEmployer, logoProfileURL: logoProfile?.logoProfileURL}})
+                const resFetch = await utilFetch('jobs', 'POST', {...formatValues, dataEmployer: {...dataEmployer, logoProfileURL: logoProfile?.logoProfileURL}})
+                if(resFetch) {
+                    setIsLoading(false)
+                    setIsSuccess(true)
+                    resetForm()
+                }
             }
         },
         validationSchema: Yup.object({

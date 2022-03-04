@@ -2,7 +2,9 @@ import useSWR from 'swr'
 import * as Yup from 'yup'
 import Modal from "../UI/Modal"
 import { useFormik } from "formik"
+import { utilFetch } from 'utils/utils'
 import { useRouter } from 'next/router'
+import { apiRoute } from 'config/config'
 import { useState, useEffect } from "react"
 import InputControl from "../UI/InputControl"
 
@@ -14,8 +16,8 @@ const ApplyForm = ({dataPost, dataUserLogin, handleClose}) => {
     const [isLoading, setIsLoading] = useState(false)
     const [isSuccess, setIsSuccess] = useState(false)
 
-    const { data, error } = useSWR(
-        `/api/account/${dataUserLogin?.email}?coll=job_seekers`,
+    const { data } = useSWR(
+        `${apiRoute}/api/account/${dataUserLogin?.email}?coll=job_seekers`,
         fetcher
     );
 
@@ -31,25 +33,14 @@ const ApplyForm = ({dataPost, dataUserLogin, handleClose}) => {
         onSubmit: async (values) => {
             setIsLoading(true)
             const formatValues = {
-                fotoProfileURL: data?.data?.fotoProfile?.fotoProfileURL ? data?.data?.fotoProfile?.fotoProfileURL : null,
+                fotoProfileURL: data?.data?.fotoProfile?.fotoProfileURL,
                 email: data.data?.email,
                 ...values
             }
-            try {
-                const req = await fetch(`/api/jobs/${dataPost._id}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({id: dataUserLogin._id, ...formatValues})
-                })
-                const res = req.json()
-                if(res) {
-                    setIsLoading(false)
-                    setIsSuccess(true)
-                }
-            } catch (error) {
+            const resFetch = await utilFetch(`jobs/${dataPost._id}`, 'POST', {id: dataUserLogin._id, ...formatValues})
+            if(resFetch) {
                 setIsLoading(false)
+                setIsSuccess(true)
             }
         },
         validationSchema: Yup.object({
@@ -67,8 +58,6 @@ const ApplyForm = ({dataPost, dataUserLogin, handleClose}) => {
         handleClose()
         router.replace(router.asPath)
     }
-
-    
     useEffect(() => {
        if(data) {
            formik.setValues({
@@ -79,9 +68,6 @@ const ApplyForm = ({dataPost, dataUserLogin, handleClose}) => {
            })
        } 
     }, [data])
-
-    console.log(data)
-
 
     return (
         <Modal bigModal>

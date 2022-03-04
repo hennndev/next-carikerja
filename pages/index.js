@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import { useState } from 'react'
+import { apiRoute } from 'config/config'
 import { utilValSearch } from 'utils/utils'
 import Posts from '@/components/Homepage/Posts'
 import PageHeader from '@/components/UI/PageHeader'
@@ -60,7 +61,7 @@ export default function Home({data}) {
 
 
 export const getServerSideProps = async() => {
-    const res = await fetch('http://localhost:3000/api/jobs')
+    const res = await fetch(`${apiRoute}/api/jobs`)
     const data = await res.json()
     return {
         props: {

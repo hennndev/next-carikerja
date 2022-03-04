@@ -32,44 +32,44 @@ const FilteredJob = ({kategoriValues, setKategoriValues, sistemValues, setSistem
                     <h2 className="font-medium text-blue-400 text-lg">Kategori</h2>
                     <div className="mt-3 flex flex-col space-y-4">
                         <div className="flex items-center space-x-3">
-                            <input type="checkbox" name="Programming &amp; Tech" onChange={kategoriChange}/>
-                            <label htmlFor="" className="text-[15px] text-[#325288]">Programming &amp; Tech</label>
+                            <input type="checkbox" id="programming-tech" name="Programming &amp; Tech" onChange={kategoriChange}/>
+                            <label htmlFor="programming-tech" className="text-[15px] text-[#325288]">Programming &amp; Tech</label>
                         </div>
                         <div className="flex items-center space-x-3">
-                            <input type="checkbox" name="Graphic Design" onChange={kategoriChange}/>
-                            <label className="text-[15px] text-gray-500">Graphic Design</label>
+                            <input type="checkbox" id="graphic-design" name="Graphic Design" onChange={kategoriChange}/>
+                            <label htmlFor="graphic-design" className="text-[15px] text-gray-500">Graphic Design</label>
                         </div>
                         <div className="flex items-center space-x-3">
-                            <input type="checkbox" name="Digital Marketing" onChange={kategoriChange}/>
-                            <label className="text-[15px] text-gray-500">Digital Marketing</label>
+                            <input type="checkbox" id="digital-marketing" name="Digital Marketing" onChange={kategoriChange}/>
+                            <label htmlFor="digital-marketing" className="text-[15px] text-gray-500">Digital Marketing</label>
                         </div>
                         <div className="flex items-center space-x-3">
-                            <input type="checkbox" name="Graphic Video &amp; Animation" onChange={kategoriChange}/>
-                            <label className="text-[15px] text-gray-500">Graphic Video &amp; Animation</label>
+                            <input type="checkbox" id="graphic-video" name="Graphic Video &amp; Animation" onChange={kategoriChange}/>
+                            <label htmlFor="graphic-video" className="text-[15px] text-gray-500">Graphic Video &amp; Animation</label>
                         </div>
                         <div className="flex items-center space-x-3">
-                            <input type="checkbox" name="UI/UX" onChange={kategoriChange}/>
-                            <label className="text-[15px] text-gray-500">UI/UX</label>
+                            <input type="checkbox" id="ui/ux" name="UI/UX" onChange={kategoriChange}/>
+                            <label htmlFor="ui/ux" className="text-[15px] text-gray-500">UI/UX</label>
                         </div>
                         <div className="flex items-center space-x-3">
-                            <input type="checkbox" name="Writing &amp; Translation" onChange={kategoriChange}/>
-                            <label className="text-[15px] text-gray-500">Writing &amp; Translation</label>
+                            <input type="checkbox" id="writing-translation" name="Writing &amp; Translation" onChange={kategoriChange}/>
+                            <label htmlFor="writing-translation" className="text-[15px] text-gray-500">Writing &amp; Translation</label>
                         </div>
                         <div className="flex items-center space-x-3">
-                            <input type="checkbox" name="Voice Over" onChange={kategoriChange}/>
-                            <label className="text-[15px] text-gray-500">Voice Over</label>
+                            <input type="checkbox" id="voice-over" name="Voice Over" onChange={kategoriChange}/>
+                            <label htmlFor="voice-over" className="text-[15px] text-gray-500">Voice Over</label>
                         </div>
                         <div className="flex items-center space-x-3">
-                            <input type="checkbox" name="Bussines" onChange={kategoriChange}/>
-                            <label className="text-[15px] text-gray-500">Bussines</label>
+                            <input type="checkbox" id="bussines" name="Bussines" onChange={kategoriChange}/>
+                            <label htmlFor="bussines" className="text-[15px] text-gray-500">Bussines</label>
                         </div>
                         <div className="flex items-center space-x-3">
-                            <input type="checkbox" name="Lifestyle" onChange={kategoriChange}/>
-                            <label className="text-[15px] text-gray-500">Lifestyle</label>
+                            <input type="checkbox" id="lifestyle" name="Lifestyle" onChange={kategoriChange}/>
+                            <label htmlFor="lifestyle" className="text-[15px] text-gray-500">Lifestyle</label>
                         </div>
                         <div className="flex items-center space-x-3">
-                            <input type="checkbox" name="Trending" onChange={kategoriChange}/>
-                            <label className="text-[15px] text-gray-500">Trending</label>
+                            <input type="checkbox" id="trending" name="Trending" onChange={kategoriChange}/>
+                            <label htmlFor="trending" className="text-[15px] text-gray-500">Trending</label>
                         </div>
                     </div>     
                 </div>

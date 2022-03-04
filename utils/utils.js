@@ -1,10 +1,11 @@
+import { apiRoute } from "config/config"
+
 export const utilValSearch = (val) => {
     return val.toLowerCase().trim().replaceAll(' ', '')
 }
 
-
 export const utilFetch = async (url, method, values) => {
-    const req = await fetch(`http://localhost:3000/api/${url}`, {
+    const req = await fetch(`${apiRoute}/api/${url}`, {
         method: method,
         headers: {
             'Content-Type': 'application/json'
@@ -16,7 +17,7 @@ export const utilFetch = async (url, method, values) => {
 }
 
 export const utilFetchGet = async (url) => {
-    const req = await fetch(`http://localhost:3000/api/${url}`)
+    const req = await fetch(`${apiRoute}/api/${url}`)
     const res = await req.json()
     return res
 }

@@ -7,7 +7,6 @@ import { useAuth } from "context/authContext"
 const EmployerProfile = ({data, handleEdit}) => {
 
     const { userLogin } = useAuth()
-
     return (
         <div className="profile-container">
             <div className="flex-center flex-col space-y-2">
@@ -18,7 +17,7 @@ const EmployerProfile = ({data, handleEdit}) => {
                 <div className="flex items-center space-x-2 text-gray-500 text-[15px]">
                     {data?.alamatPerusahaan && <FiMapPin/>}
                     <p>
-                        {data?.alamatPerusahaan ? data.alamatPerusahaan : '---Alamat Perusahaan Anda---'}
+                        {data?.alamatPerusahaan ? data.alamatPerusahaan : userLogin?.username ? '---' : '-- Alamat Perusahaan Anda --'}
                     </p>
                 </div>
                 <SosmedIcons/>
@@ -44,7 +43,7 @@ const EmployerProfile = ({data, handleEdit}) => {
                 <div className="mt-3">
                     <h1 className="text-xl">Tentang Perusahaan</h1>
                     <p className="mt-1 text-gray-500">
-                        {data?.tentangPerusahaan ? data?.tentangPerusahaan : '---Definisikan perusahaan anda bergerak di bidang apa---'}
+                        {data?.tentangPerusahaan ? data?.tentangPerusahaan : userLogin?.username ? '---' : '-- Definisikan perusahaan anda bergerak di bidang apa --'}
                     </p>
                 </div>
             </div>

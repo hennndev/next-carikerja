@@ -15,25 +15,29 @@ const Messages = ({data}) => {
     const [value, setValue] = useState('')
     const [isStar, setIsStar] = useState(false)
 
+    const utilFilter = (val) => val?.toLowerCase()?.replaceAll(' ', '') 
+    const utilFilterMsgs = (dataParam) => {
+        return dataParam.filter(data => userLogin?.namaPerusahaan ? data.nama : data.namaPerusahaan).filter(data => isStar ? data.star : data)
+    }
+
     const filteredMessages = data.map(data => {
         return {
             ...data,
             messages: data.messages.filter(msg => {
-                return msg?.namaPerusahaan?.replaceAll(' ', '').toLowerCase().includes(value.toLowerCase().replaceAll(' ', '')) ||
-                msg?.nama?.replaceAll(' ', '').toLowerCase().includes(value.toLowerCase().replaceAll(' ', '')) ||
-                moment(msg.createdAt).format('l').replaceAll(' ', '').toLowerCase().includes(value.toLowerCase().replaceAll(' ', ''))
+                return utilFilter(msg?.namaPerusahaan)?.includes(utilFilter(value)) ||
+                utilFilter(msg?.nama)?.includes(utilFilter(value)) ||
+                utilFilter(moment(msg.createdAt).format('l')).includes(utilFilter(value))
             })
         }
     })
-    const filterMsgs = (dataParam) => {
-        return dataParam.filter(data => userLogin?.namaPerusahaan ? data.nama : data.namaPerusahaan).filter(data => isStar ? data.star : data)
-    }
+    
     const messagesLength = filteredMessages.map(data => {
         return {
             ...data,
-            messages: filterMsgs(data.messages)
+            messages: utilFilterMsgs(data.messages)
         }
     }).reduce((currVal, val) => currVal += val.messages.length ,0)
+
 
     return (
         <>
@@ -53,7 +57,7 @@ const Messages = ({data}) => {
                             <h1 className={`${!isStar? 'text-blue-600' : 'text-gray-600 '} hover:text-blue-600 font-medium cursor-pointer`} onClick={() => setIsStar(false)}>Semua Pesan</h1>
                             <h1 className={`${isStar? 'text-orange-600' : 'text-gray-600'} hover:text-orange-600 font-medium cursor-pointer`} onClick={() => setIsStar(true)}>Pesan Berbintang</h1>
                         </div>
-                        {messagesLength > 0 ? <Msgs data={filteredMessages} filterMsgs={filterMsgs}/> : (
+                        {messagesLength > 0 ? <Msgs data={filteredMessages} utilFilterMsgs={utilFilterMsgs}/> : (
                             <h1 className="text-center text-gray-500 text-lg font-medium mt-5">
                                 {isStar ? 'Tidak ada pesan berbintang!' : 'Tidak ada pesan!'}
                             </h1>
