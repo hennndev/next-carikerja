@@ -64,7 +64,7 @@ const PostDetail = ({data}) => {
                                             <span className="text-gray-600 font-medium">{data?.data.sistemPekerjaan}</span>
                                     </p>
                                     <p>Jangka Waktu: {' '}
-                                        <span className="text-gray-600 font-medium">{data?.data.jangkaWaktu.replaceAll('_', ' ')}</span>
+                                        <span className="text-gray-600 font-medium">{data?.data?.jangkaWaktu?.replaceAll('_', ' ')}</span>
                                     </p>
                                     <p>Range Gaji: <span className="text-green-600 font-medium">{data?.data.rangeGaji}</span></p>
                                     {!userLogin?.namaPerusahaan && (
