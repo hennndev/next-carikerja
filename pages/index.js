@@ -27,47 +27,42 @@ export default function Home({data}) {
         filteredPost = filteredPost.filter(data => kategoriValues.includes(data.kategoriPekerjaan))
     }
 
-    return (
-        <>
-            <Head>
-                <title>Home | CariKERJA</title>
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
-            <PageContainer>
-                <div className='content'>
-                    <PageHeader 
-                        title="Cari Kerja" 
-                        handleSearch={(val) => setSearchVal(val)}
-                        searchPlaceholder="Cari pekerjaan atau kata kunci" 
-                        searchBtn="Cari Pekerjaan"/>
-                    <div className="px-5 xl:px-10">
-                        {data?.data?.length > 0 ? <Posts posts={sistemValues.length < 1 ? filteredPost : filteredPost.filter(post => sistemValues.includes(post.sistemPekerjaan))}/> : (
-                            <h1 className='text-gray-500 text-center font-medium text-lg'>Tidak ada post untuk saat ini!</h1>
-                        )}
+    if(!data) {
+        return <p>loading...</p>
+    } else {
+        return (
+            <>
+                <Head>
+                    <title>Home | CariKERJA</title>
+                    <link rel="icon" href="/favicon.ico" />
+                </Head>
+                <PageContainer>
+                    <div className='content'>
+                        <PageHeader 
+                            title="Cari Kerja" 
+                            handleSearch={(val) => setSearchVal(val)}
+                            searchPlaceholder="Cari pekerjaan atau kata kunci" 
+                            searchBtn="Cari Pekerjaan"/>
+                        <div className="px-5 xl:px-10">
+                            {data?.data?.length > 0 ? <Posts posts={sistemValues.length < 1 ? filteredPost : filteredPost.filter(post => sistemValues.includes(post.sistemPekerjaan))}/> : (
+                                <h1 className='text-gray-500 text-center font-medium text-lg'>Tidak ada post untuk saat ini!</h1>
+                            )}
+                        </div>
                     </div>
-                </div>
-                <RightSidebar>
-                    <FilteredJob 
-                        kategoriValues={kategoriValues} setKategoriValues={setKategoriValues}
-                        sistemValues={sistemValues} setSistemValues={setSistemValues}/>
-                </RightSidebar>
-            </PageContainer>
-        </>
-    )
+                    <RightSidebar>
+                        <FilteredJob 
+                            kategoriValues={kategoriValues} setKategoriValues={setKategoriValues}
+                            sistemValues={sistemValues} setSistemValues={setSistemValues}/>
+                    </RightSidebar>
+                </PageContainer>
+            </>
+        )
+    }
 }
 
 
 export const getServerSideProps = async() => {
-    let data = {
-        data: []
-    }
-    try {
-        data =  await utilFetchGet(`jobs`)
-    } catch (error) {
-        data = {
-            data: []
-        }
-    }
+    let data = await utilFetchGet(`jobs`)
     return {
         props: {
             data
