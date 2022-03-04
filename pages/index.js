@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { useState } from 'react'
 import { apiRoute } from 'config/config'
+import { utilFetchGet } from 'utils/utils'
 import { utilValSearch } from 'utils/utils'
 import Posts from '@/components/Homepage/Posts'
 import PageHeader from '@/components/UI/PageHeader'
@@ -28,41 +29,43 @@ export default function Home({data}) {
         filteredPost = filteredPost.filter(data => kategoriValues.includes(data.kategoriPekerjaan))
     }
 
-    if(data) {
-        return (
-            <>
-                <Head>
-                    <title>Home | CariKERJA</title>
-                    <link rel="icon" href="/favicon.ico" />
-                </Head>
-                <PageContainer>
-                    <div className='content'>
-                        <PageHeader 
-                            title="Cari Kerja" 
-                            handleSearch={(val) => setSearchVal(val)}
-                            searchPlaceholder="Cari pekerjaan atau kata kunci" 
-                            searchBtn="Cari Pekerjaan"/>
-                        <div className="px-5 xl:px-10">
-                            {data?.data.length > 0 ? <Posts posts={sistemValues.length < 1 ? filteredPost : filteredPost.filter(post => sistemValues.includes(post.sistemPekerjaan))}/> : (
-                                <h1 className='text-gray-500 text-center font-medium text-lg'>Tidak ada post untuk saat ini!</h1>
-                            )}
-                        </div>
+    return (
+        <>
+            <Head>
+                <title>Home | CariKERJA</title>
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+            <PageContainer>
+                <div className='content'>
+                    <PageHeader 
+                        title="Cari Kerja" 
+                        handleSearch={(val) => setSearchVal(val)}
+                        searchPlaceholder="Cari pekerjaan atau kata kunci" 
+                        searchBtn="Cari Pekerjaan"/>
+                    <div className="px-5 xl:px-10">
+                        {data?.data?.length > 0 ? <Posts posts={sistemValues.length < 1 ? filteredPost : filteredPost.filter(post => sistemValues.includes(post.sistemPekerjaan))}/> : (
+                            <h1 className='text-gray-500 text-center font-medium text-lg'>Tidak ada post untuk saat ini!</h1>
+                        )}
                     </div>
-                    <RightSidebar>
-                        <FilteredJob 
-                            kategoriValues={kategoriValues} setKategoriValues={setKategoriValues}
-                            sistemValues={sistemValues} setSistemValues={setSistemValues}/>
-                    </RightSidebar>
-                </PageContainer>
-            </>
-        )
-    }
+                </div>
+                <RightSidebar>
+                    <FilteredJob 
+                        kategoriValues={kategoriValues} setKategoriValues={setKategoriValues}
+                        sistemValues={sistemValues} setSistemValues={setSistemValues}/>
+                </RightSidebar>
+            </PageContainer>
+        </>
+    )
 }
 
 
 export const getServerSideProps = async() => {
-    const res = await fetch(`${apiRoute}/api/jobs`)
-    const data = await res.json()
+    let data
+    try {
+        data = await utilFetchGet(`jobs`)
+    } catch (error) {
+        data = []
+    }
     return {
         props: {
             data
