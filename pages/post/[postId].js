@@ -38,73 +38,75 @@ const PostDetail = ({data}) => {
             <PageContainer>
                 <div className='content'>
                     <PageHeader title="Post Detail"/>
-                    <div className="px-5 xl:px-10">
-                        <BackPage clicked={() => router.back()}/>
-                        <div className="mt-5 px-2">
-                            <div className="flex items-center space-x-3">
-                                <div className="w-16 h-16 relative rounded-full">
-                                    <Image src={data?.data?.dataEmployer?.logoProfileURL ? data?.data?.dataEmployer?.logoProfileURL : '/images/blank-profile.png'} layout="fill" objectFit="contain" className="rounded"/>
-                                </div>
-                                <h1 className="text-lg flex-1 font-medium text-gray-700">{data?.data?.dataEmployer.namaPerusahaan}</h1>
-                            </div>
-                            
-                            <div className="flex flex-col space-y-3 mt-5">
-                                <h1 className="text-2xl text-gray-600 font-bold">{data?.data.judul}</h1>
-                                <p>{data?.data.deskripsiPekerjaan}</p>
-                                <div className='mt-5 flex items-center flex-wrap'>
-                                    {data?.data.kemampuan.map((skill) => (
-                                        <p className='text-box' key={skill}>{skill}</p>
-                                    ))}
-                                </div>      
-                                <p>Tingkatan Kandidat: {' '}
-                                    <span className="text-gray-600 font-medium">{data?.data.tingkatanKandidat}</span>
-                                </p>
-                                <p>Sistem Pekerjaan: {' '}
-                                        <span className="text-gray-600 font-medium">{data?.data.sistemPekerjaan}</span>
-                                </p>
-                                <p>Jangka Waktu: {' '}
-                                    <span className="text-gray-600 font-medium">{data?.data.jangkaWaktu.replaceAll('_', ' ')}</span>
-                                </p>
-                                <p>Range Gaji: <span className="text-green-600 font-medium">{data?.data.rangeGaji}</span></p>
-                                {!userLogin?.namaPerusahaan && (
-                                    <div className="flex items-center space-x-3">
-                                        <button className={`btn ${checkCandidateExist && 'bg-gray-600 hover:bg-gray-600 cursor-not-allowed'} text-white flex items-center text-sm w-max`} onClick={handleApply}>
-                                            <BsBoxArrowInUpLeft className="text-xl mr-2"/>
-                                            {checkCandidateExist ? 'Anda sudah apply' : !userLogin ? 'Login dulu' : 'Apply Sekarang'}
-                                        </button>
-                                        <span className="text-gray-400 font-bold">||</span>
-                                        <p className="bg-gray-600 p-2 rounded-md text-white text-sm h-max w-max">
-                                            {data?.data.kandidat.length} Kandidat
-                                        </p>
+                    {data && (
+                        <div className="px-5 xl:px-10">
+                            <BackPage clicked={() => router.back()}/>
+                            <div className="mt-5 px-2">
+                                <div className="flex items-center space-x-3">
+                                    <div className="w-16 h-16 relative rounded-full">
+                                        <Image src={data?.data?.dataEmployer?.logoProfileURL ? data?.data?.dataEmployer?.logoProfileURL : '/images/blank-profile.png'} layout="fill" objectFit="contain" className="rounded"/>
                                     </div>
-                                )}
-                            </div>
-                            <div className="mt-10">
-                                <div className="flex-detail">
-                                    <h1 className="text-title-detail">Tentang Perusahaan</h1>
-                                    <p className="text-gray-600">{data?.data.dataEmployer.tentangPerusahaan? data?.data.dataEmployer.tentangPerusahaan : '---'}</p>
+                                    <h1 className="text-lg flex-1 font-medium text-gray-700">{data?.data?.dataEmployer.namaPerusahaan}</h1>
                                 </div>
-                                <div className="flex-detail">
-                                    <h1 className="text-title-detail">Alamat Perusahaan</h1>
-                                    <p className="text-gray-600 mt-1">{data?.data.dataEmployer.alamatPerusahaan ? data?.data.dataEmployer.alamatPerusahaan : '---'}</p>
+                                
+                                <div className="flex flex-col space-y-3 mt-5">
+                                    <h1 className="text-2xl text-gray-600 font-bold">{data?.data.judul}</h1>
+                                    <p>{data?.data.deskripsiPekerjaan}</p>
+                                    <div className='mt-5 flex items-center flex-wrap'>
+                                        {data?.data.kemampuan.map((skill) => (
+                                            <p className='text-box' key={skill}>{skill}</p>
+                                        ))}
+                                    </div>      
+                                    <p>Tingkatan Kandidat: {' '}
+                                        <span className="text-gray-600 font-medium">{data?.data.tingkatanKandidat}</span>
+                                    </p>
+                                    <p>Sistem Pekerjaan: {' '}
+                                            <span className="text-gray-600 font-medium">{data?.data.sistemPekerjaan}</span>
+                                    </p>
+                                    <p>Jangka Waktu: {' '}
+                                        <span className="text-gray-600 font-medium">{data?.data.jangkaWaktu.replaceAll('_', ' ')}</span>
+                                    </p>
+                                    <p>Range Gaji: <span className="text-green-600 font-medium">{data?.data.rangeGaji}</span></p>
+                                    {!userLogin?.namaPerusahaan && (
+                                        <div className="flex items-center space-x-3">
+                                            <button className={`btn ${checkCandidateExist && 'bg-gray-600 hover:bg-gray-600 cursor-not-allowed'} text-white flex items-center text-sm w-max`} onClick={handleApply}>
+                                                <BsBoxArrowInUpLeft className="text-xl mr-2"/>
+                                                {checkCandidateExist ? 'Anda sudah apply' : !userLogin ? 'Login dulu' : 'Apply Sekarang'}
+                                            </button>
+                                            <span className="text-gray-400 font-bold">||</span>
+                                            <p className="bg-gray-600 p-2 rounded-md text-white text-sm h-max w-max">
+                                                {data?.data.kandidat.length} Kandidat
+                                            </p>
+                                        </div>
+                                    )}
                                 </div>
-                                <div className="flex-detail">
-                                    <h1 className="text-title-detail">Situs Perusahaan</h1>
+                                <div className="mt-10">
+                                    <div className="flex-detail">
+                                        <h1 className="text-title-detail">Tentang Perusahaan</h1>
+                                        <p className="text-gray-600">{data?.data.dataEmployer.tentangPerusahaan? data?.data.dataEmployer.tentangPerusahaan : '---'}</p>
+                                    </div>
+                                    <div className="flex-detail">
+                                        <h1 className="text-title-detail">Alamat Perusahaan</h1>
+                                        <p className="text-gray-600 mt-1">{data?.data.dataEmployer.alamatPerusahaan ? data?.data.dataEmployer.alamatPerusahaan : '---'}</p>
+                                    </div>
+                                    <div className="flex-detail">
+                                        <h1 className="text-title-detail">Situs Perusahaan</h1>
+                                        <div className="flex flex-col space-y-2">
+                                            {data?.data.dataEmployer.situsPerusahaan.length > 0 ? data?.data.dataEmployer.situsPerusahaan.map(situs => (
+                                                <p className="mt-1 text-blue-500" key={situs}>{situs}</p>
+                                            )) : (
+                                                <p className="mt-1">---</p>
+                                            )}
+                                        </div>
+                                    </div>
                                     <div className="flex flex-col space-y-2">
-                                        {data?.data.dataEmployer.situsPerusahaan.length > 0 ? data?.data.dataEmployer.situsPerusahaan.map(situs => (
-                                            <p className="mt-1 text-blue-500" key={situs}>{situs}</p>
-                                        )) : (
-                                            <p className="mt-1">---</p>
-                                        )}
-                                    </div>
+                                        <h1 className="text-title-detail">Social Media</h1>
+                                        <SosmedIcons/>
+                                    </div>          
                                 </div>
-                                <div className="flex flex-col space-y-2">
-                                    <h1 className="text-title-detail">Social Media</h1>
-                                    <SosmedIcons/>
-                                </div>          
-                            </div>
-                        </div> 
-                    </div>       
+                            </div> 
+                        </div>   
+                    )}    
                 </div>
                 <RightSidebar>
                     <LatestJob/>
@@ -144,11 +146,17 @@ export const getStaticPaths = async () => {
 }
 
 export const getStaticProps = async ({params}) => {
-    const data = await utilFetchGet(`jobs/${params.postId}`)
-    return {
-        props: { data },
-        revalidate: 40
-    }
+    try {
+        const data = await utilFetchGet(`jobs/${params.postId}`)
+        return {
+            props: { data },
+            revalidate: 60
+        }
+    } catch (error) {
+        return {
+            notFound: true
+        }
+    } 
 }
 
 
