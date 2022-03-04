@@ -13,12 +13,14 @@ export default function Home({data}) {
     const [sistemValues, setSistemValues] = useState([])
     const [kategoriValues, setKategoriValues] = useState([])
 
+    replaceAll
+
     let filteredPost = data?.data?.filter(post => {
         return post?.dataEmployer?.alamatPerusahaan.toLowerCase().includes(searchVal?.toLowerCase()?.trim()?.replaceAll(' ', '')) ||
                 post?.dataEmployer?.namaPerusahaan.toLowerCase().includes(searchVal?.toLowerCase()?.trim()?.replaceAll(' ', '')) || 
-                post?.tingkatanKandidat?.toLowerCase().replaceAll('/', '').includes(searchVal?.toLowerCase()?.trim()?.replaceAll(' ', '')) ||
+                post?.tingkatanKandidat?.toLowerCase()?.replaceAll('/', '').includes(searchVal?.toLowerCase()?.trim()?.replaceAll(' ', '')) ||
                 post?.sistemPekerjaan?.replace('-', '').toLowerCase().includes(searchVal?.toLowerCase()?.trim()?.replaceAll(' ', '')) ||
-                post?.judul?.toLowerCase().replaceAll(' ', '').includes(searchVal?.toLowerCase()?.trim()?.replaceAll(' ', '')) ||
+                post?.judul?.toLowerCase()?.replaceAll(' ', '').includes(searchVal?.toLowerCase()?.trim()?.replaceAll(' ', '')) ||
                 post?.kategoriPekerjaan?.toLowerCase().includes(searchVal?.toLowerCase()?.trim()?.replaceAll(' ', '')) ||
                 [].concat.apply([], post?.kemampuan?.map(skill => skill.split(' '))).some(skill => searchVal.split(' ').includes(skill))
     })
