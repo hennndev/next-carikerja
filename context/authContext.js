@@ -23,11 +23,11 @@ const AuthProvider = ({children}) => {
         router.replace('/')
     }
 
-    useEffect(() => {
-        if(cookies.userLogin) {
-            setUserLogin(JSON.parse(cookies.userLogin))
-        }
-     }, [cookies.userLogin]);
+    // useEffect(() => {
+    //     if(cookies.userLogin) {
+    //         setUserLogin(JSON.parse(cookies.userLogin))
+    //     }
+    //  }, [cookies.userLogin]);
     
     const value = {
         userLogin,
