@@ -14,15 +14,16 @@ export default function Home({data}) {
     const [sistemValues, setSistemValues] = useState([])
     const [kategoriValues, setKategoriValues] = useState([])
 
-    let filteredPost = data?.data?.filter(post => {
-        return post?.dataEmployer?.alamatPerusahaan?.toLowerCase().includes(utilValSearch(searchVal)) ||
-                post?.dataEmployer?.namaPerusahaan?.toLowerCase().includes(utilValSearch(searchVal)) || 
-                post?.tingkatanKandidat?.toLowerCase()?.replaceAll('/', '').includes(utilValSearch(searchVal)) ||
-                post?.sistemPekerjaan?.replace('-', '').toLowerCase().includes(utilValSearch(searchVal)) ||
-                post?.judul?.toLowerCase()?.replaceAll(' ', '').includes(utilValSearch(searchVal)) ||
-                post?.kategoriPekerjaan?.toLowerCase().includes(utilValSearch(searchVal)) ||
-                [].concat.apply([], post?.kemampuan?.map(skill => skill.split(' '))).some(skill => searchVal.split(' ').includes(skill))
-    })
+    // let filteredPost = data?.data?.filter(post => {
+    //     return post?.dataEmployer?.alamatPerusahaan?.toLowerCase().includes(utilValSearch(searchVal)) ||
+    //             post?.dataEmployer?.namaPerusahaan?.toLowerCase().includes(utilValSearch(searchVal)) || 
+    //             post?.tingkatanKandidat?.toLowerCase()?.replaceAll('/', '').includes(utilValSearch(searchVal)) ||
+    //             post?.sistemPekerjaan?.replace('-', '').toLowerCase().includes(utilValSearch(searchVal)) ||
+    //             post?.judul?.toLowerCase()?.replaceAll(' ', '').includes(utilValSearch(searchVal)) ||
+    //             post?.kategoriPekerjaan?.toLowerCase().includes(utilValSearch(searchVal)) ||
+    //             [].concat.apply([], post?.kemampuan?.map(skill => skill.split(' '))).some(skill => searchVal.split(' ').includes(skill))
+    // })
+    const filteredPost = data?.data
 
     if(kategoriValues.length > 0) {
         filteredPost = filteredPost.filter(data => kategoriValues.includes(data.kategoriPekerjaan))
@@ -58,9 +59,10 @@ export default function Home({data}) {
 }
 
 
-export const getServerSideProps = async() => {
-    const res = await fetch(`https://next-carikerja.vercel.app/api/jobs`)
+export const getStaticProps = async() => {
+    const res = await fetch(`${apiRoute}/api/jobs`)
     const data = await res.json()
+
     return {
         props: {
             data
