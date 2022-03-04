@@ -62,7 +62,7 @@ export default function Home({data}) {
 
 
 export const getStaticProps = async() => {
-    data = []
+    let data = []
     try {
         data = await utilFetchGet(`jobs`)
     } catch (error) {
