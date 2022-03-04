@@ -144,17 +144,11 @@ export const getStaticPaths = async () => {
 }
 
 export const getStaticProps = async ({params}) => {
-    try {
-        const data = await utilFetchGet(`jobs/${params.postId}`)
-        return {
-            props: { data },
-            revalidate: 40
-        }
-    } catch (error) {
-        return {
-            notFound: true
-        }
-    } 
+    const data = await utilFetchGet(`jobs/${params.postId}`)
+    return {
+        props: { data },
+        revalidate: 40
+    }
 }
 
 
