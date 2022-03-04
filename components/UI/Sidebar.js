@@ -14,7 +14,7 @@ const Sidebar = () => {
     const router = useRouter()
     const { userLogin, handleLogout } = useAuth()
     const { openSidebar, handleCloseSidebar } = useData()
-    const { data } = useSWR('/api/messages', fetcher, { refreshInterval: 1000 })
+    const { data } = useSWR('/api/messages', fetcher)
     
     const handleClick = (route) => {
         handleCloseSidebar()
