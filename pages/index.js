@@ -1,12 +1,10 @@
 import Head from 'next/head'
 import { useState } from 'react'
-import { apiRoute } from 'config/config'
-import { utilFetchGet } from 'utils/utils'
-import { utilValSearch } from 'utils/utils'
 import Posts from '@/components/Homepage/Posts'
 import PageHeader from '@/components/UI/PageHeader'
 import RightSidebar from '@/components/UI/RightSidebar'
 import PageContainer from '@/components/UI/PageContainer'
+import { utilFetchGet, utilValSearch } from 'utils/utils'
 import FilteredJob from '@/components/Homepage/FilteredJob'
 
 export default function Home({data}) {

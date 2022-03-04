@@ -17,7 +17,7 @@ export const utilFetch = async (url, method, values) => {
 }
 
 export const utilFetchGet = async (url) => {
-    const req = await fetch(`${apiRoute}/api/${url}`)
-    const res = await req.json()
-    return res
+    const res = await fetch(`${apiRoute}/api/${url}`)
+    const data = await res.json()
+    return data
 }
