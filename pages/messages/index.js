@@ -2,6 +2,7 @@ import moment from "moment"
 import Head from "next/head"
 import nookies from 'nookies'
 import { useState } from "react"
+import { utilFetchGet } from "utils/utils"
 import { useAuth } from "context/authContext"
 import Msgs from "@/components/Messages/Messages"
 import LatestJob from "@/components/UI/LatestJob"
@@ -83,8 +84,7 @@ export const getServerSideProps = async(ctx) => {
         }
     }
     if(JSON.parse(cookies.userLogin)) {
-        const res = await fetch(`http://localhost:3000/api/messages/${JSON.parse(cookies.userLogin)?.email}?q=${JSON.parse(cookies.userLogin)?.namaPerusahaan ? 'employer' : 'job_seeker'}`)
-        const data = await res.json()
+        const data = await utilFetchGet(`messages/${JSON.parse(cookies.userLogin)?.email}?q=${JSON.parse(cookies.userLogin)?.namaPerusahaan ? 'employer' : 'job_seeker'}`)
 
         return {
             props: data

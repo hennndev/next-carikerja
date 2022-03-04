@@ -42,7 +42,7 @@ const Profile = ({data}) => {
 }
 
 export const getServerSideProps = async(ctx) => {
-    const { userLogin } = nookies.get(ctx, 'userLogin')
+    const { userLogin } = nookies.get(ctx)
     if(!userLogin) {
         return {
             redirect: {

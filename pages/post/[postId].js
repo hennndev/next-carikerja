@@ -2,7 +2,7 @@ import Head from "next/head"
 import Image from "next/image"
 import { useState } from "react"
 import { useRouter } from "next/router"
-import { apiRoute } from "config/config"
+import { utilFetchGet } from "utils/utils"
 import { useAuth } from "context/authContext"
 import BackPage from "@/components/UI/BackPage"
 import LatestJob from "@/components/UI/LatestJob"
@@ -116,8 +116,7 @@ const PostDetail = ({data}) => {
 
 
 export const getServerSideProps = async(context) => {
-    const res = await fetch(`${apiRoute}/api/jobs`)
-    const data = await res.json()
+    const data = await utilFetchGet(`jobs`)
     const dataId = data?.data.find(post => post._id === context.query.postId)
 
     if(!dataId) {

@@ -3,6 +3,7 @@ import nookies from 'nookies'
 import { useState } from "react"
 import { useRouter } from "next/router"
 import Modal from "@/components/UI/Modal"
+import { utilFetchGet } from "utils/utils"
 import Post from "@/components/MyPost/Post"
 import LatestJob from "@/components/UI/LatestJob"
 import PageHeader from "@/components/UI/PageHeader"
@@ -94,8 +95,7 @@ const MyPost = ({data}) => {
 
 export const getServerSideProps = async(ctx) => {
     const { userLogin } = nookies.get(ctx) 
-    const res = await fetch('http://localhost:3000/api/jobs')
-    const data = await res.json()
+    const data = await utilFetchGet('jobs')
 
     if(!userLogin) {
         return {
@@ -104,7 +104,6 @@ export const getServerSideProps = async(ctx) => {
             }
         }
     }
-
     if(JSON.parse(userLogin)) {
         const getData = data.data.filter(post => post.dataEmployer?.email === JSON.parse(userLogin)?.email )
         return {

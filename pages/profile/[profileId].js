@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import nookies from 'nookies'
-import { utilFetch } from 'utils/utils'
 import { useRouter } from 'next/router'
+import { utilFetchGet } from 'utils/utils'
 import { useAuth } from 'context/authContext'
 import BackPage from '@/components/UI/BackPage'
 import LatestJob from '@/components/UI/LatestJob'
@@ -42,8 +42,8 @@ export const getServerSideProps = async(req, res) => {
     const { profileId } = req.query
     const { userLogin } = nookies.get(req)
 
-    const data = await utilFetch(`account/${profileId}?coll=${!JSON.parse(userLogin)?.namaPerusahaan ? 'employers': 'job_seekers'}`)
-
+    
+    const data = await utilFetchGet(`account/${profileId}?coll=${!JSON.parse(userLogin)?.namaPerusahaan ? 'employers': 'job_seekers'}`)
     if(!data.data) {
         return {
             notFound: true
