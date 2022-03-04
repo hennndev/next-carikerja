@@ -60,8 +60,12 @@ export default function Home({data}) {
 
 
 export const getServerSideProps = async() => {
-    const req = await fetch(`${apiRoute}/api/jobs`)
-    const data = await req.json()
+    let data
+    try {
+        data = await utilFetchGet(`jobs`)
+    } catch (error) {
+        data = []
+    }
     return {
         props: {
             data
