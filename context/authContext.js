@@ -1,29 +1,33 @@
-import { createContext, useContext, useState, useEffect } from "react"
 import Cookies from "js-cookie"
+import { parseCookies, setCookie, destroyCookie } from "nookies"
 import { useRouter } from "next/router"
+import { createContext, useContext, useState, useEffect } from "react"
 
 const Context = createContext()
 
 const AuthProvider = ({children}) => {
     const [userLogin, setUserLogin] = useState(null) 
-    const cookies = Cookies.get('userLogin') 
+    // const cookies = Cookies.get('userLogin') 
+    const cookies = parseCookies()
     const router = useRouter()
 
     const handleUserLogin = ({data}) => {
         setUserLogin(data)
-        Cookies.set('userLogin', JSON.stringify(data), { expires: 1 })
+        setCookie({}, 'userLogin', JSON.stringify(data))
+        // Cookies.set('userLogin', JSON.stringify(data), { expires: 1 })
     }
     const handleLogout = () => {
         setUserLogin(null)
-        Cookies.remove('userLogin')
+        destroyCookie({}, 'userLogin')
+        // Cookies.remove('userLogin')
         router.replace('/')
     }
 
     useEffect(() => {
-        if(cookies) {
-            setUserLogin(JSON.parse(cookies))
+        if(cookies.userLogin) {
+            setUserLogin(JSON.parse(cookies.userLogin))
         }
-     }, [cookies]);
+     }, [cookies.userLogin]);
     
     const value = {
         userLogin,
