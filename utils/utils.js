@@ -1,6 +1,6 @@
 import { apiRoute } from "config/config"
 
-export const utilValSearch = (val) => {
+export const utilValSearch = (val = '') => {
     return val?.toLowerCase()?.trim()?.replaceAll(' ', '')
 }
 

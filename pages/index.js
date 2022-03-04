@@ -14,12 +14,12 @@ export default function Home({data}) {
     const [kategoriValues, setKategoriValues] = useState([])
 
     let filteredPost = data?.data?.filter(post => {
-        return post?.dataEmployer?.alamatPerusahaan.toLowerCase().includes(searchVal?.toLowerCase()?.trim()?.replaceAll(' ', '')) ||
-                post?.dataEmployer?.namaPerusahaan.toLowerCase().includes(searchVal?.toLowerCase()?.trim()?.replaceAll(' ', '')) || 
-                post?.tingkatanKandidat?.toLowerCase()?.replaceAll('/', '').includes(searchVal?.toLowerCase()?.trim()?.replaceAll(' ', '')) ||
-                post?.sistemPekerjaan?.replace('-', '').toLowerCase().includes(searchVal?.toLowerCase()?.trim()?.replaceAll(' ', '')) ||
-                post?.judul?.toLowerCase()?.replaceAll(' ', '').includes(searchVal?.toLowerCase()?.trim()?.replaceAll(' ', '')) ||
-                post?.kategoriPekerjaan?.toLowerCase().includes(searchVal?.toLowerCase()?.trim()?.replaceAll(' ', '')) ||
+        return post?.dataEmployer?.alamatPerusahaan?.toLowerCase().includes(utilValSearch(searchVal)) ||
+                post?.dataEmployer?.namaPerusahaan?.toLowerCase().includes(utilValSearch(searchVal)) || 
+                post?.tingkatanKandidat?.toLowerCase()?.replaceAll('/', '').includes(utilValSearch(searchVal)) ||
+                post?.sistemPekerjaan?.replace('-', '').toLowerCase().includes(utilValSearch(searchVal)) ||
+                post?.judul?.toLowerCase()?.replaceAll(' ', '').includes(utilValSearch(searchVal)) ||
+                post?.kategoriPekerjaan?.toLowerCase().includes(utilValSearch(searchVal)) ||
                 [].concat.apply([], post?.kemampuan?.map(skill => skill.split(' '))).some(skill => searchVal.split(' ').includes(skill))
     })
 
@@ -58,11 +58,15 @@ export default function Home({data}) {
 
 
 export const getStaticProps = async() => {
-    let data = []
+    let data = {
+        data: []
+    }
     try {
         data = await utilFetchGet(`jobs`)
     } catch (error) {
-        data = []
+        data = {
+            data: []
+        }
     }
     return {
         props: {
