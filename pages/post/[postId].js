@@ -150,7 +150,7 @@ export const getStaticProps = async ({params}) => {
         const data = await utilFetchGet(`jobs/${params.postId}`)
         return {
             props: { data },
-            revalidate: 60
+            revalidate: 40
         }
     } catch (error) {
         return {
