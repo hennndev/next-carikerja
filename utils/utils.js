@@ -1,7 +1,7 @@
 import { apiRoute } from "config/config"
 
 export const utilValSearch = (val) => {
-    return val.toLowerCase().trim().replaceAll(' ', '')
+    return val?.toLowerCase()?.trim()?.replaceAll(' ', '')
 }
 
 export const utilFetch = async (url, method, values) => {
